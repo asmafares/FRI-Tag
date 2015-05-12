@@ -1,0 +1,1 @@
+/usr/bin/c++       CMakeFiles/detect_cap_ZOMBIE.dir/src/detect_cap_ZOMBIE.cpp.o  -o /home/fri/catkin_ws_bob/devel/lib/kinect_demo/detect_cap_ZOMBIE -rdynamic 

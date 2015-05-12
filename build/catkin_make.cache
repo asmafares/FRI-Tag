@@ -1,0 +1,2 @@
+kinect_demo
+-DCATKIN_DEVEL_PREFIX=/home/fri/catkin_ws_bob/devel -DCMAKE_INSTALL_PREFIX=/home/fri/catkin_ws_bob/install

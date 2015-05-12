@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "kinect_demo")
+set(kinect_demo_MAINTAINER "bwi <bwi@todo.todo>")
+set(kinect_demo_DEPRECATED "")
+set(kinect_demo_VERSION "0.0.0")
+set(kinect_demo_BUILD_DEPENDS "roscpp" "std_msgs")
+set(kinect_demo_RUN_DEPENDS "roscpp" "std_msgs")
+set(kinect_demo_BUILDTOOL_DEPENDS "catkin")

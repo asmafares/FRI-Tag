@@ -1,0 +1,8 @@
+prefix=/home/fri/catkin_ws_bob/devel
+
+Name: kinect_demo
+Description: Description of kinect_demo
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/fri/catkin_ws_bob/devel/lib 
+Requires: roscpp std_msgs
