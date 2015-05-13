@@ -106,6 +106,9 @@ include_directories(
 #   src/${PROJECT_NAME}/kinect_demo.cpp
 # )
 
+add_library (clientlib SHARED src/client.c)
+add_library (serverlib SHARED src/server.c)
+
 ## Declare a cpp executable
 add_executable(detect_cap_runner src/detect_cap_runner.cpp
                                      src/ValueLearner.cpp
@@ -113,10 +116,8 @@ add_executable(detect_cap_runner src/detect_cap_runner.cpp
                                      src/FourierFA.cpp
                                      src/BoundsPair.cpp)
 add_executable(detect_cap_chaser src/detect_cap_chaser.cpp)
-add_executable(detect_maybe src/detect_maybe.cpp)
-target_link_libraries(detect_cap_runner ${catkin_LIBRARIES} ${PCL_LIBRARIES})
-target_link_libraries(detect_cap_chaser ${catkin_LIBRARIES} ${PCL_LIBRARIES})
-target_link_libraries(detect_maybe ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+target_link_libraries(detect_cap_runner ${catkin_LIBRARIES} serverlib ${PCL_LIBRARIES})
+target_link_libraries(detect_cap_chaser ${catkin_LIBRARIES} clientlib ${PCL_LIBRARIES})
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
