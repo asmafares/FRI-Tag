@@ -30,6 +30,7 @@ extern "C" {
 /* define what kind of point clouds we're using */
 typedef pcl::PointXYZRGB PointT;
 typedef pcl::PointCloud<PointT> PointCloudT;
+//bool stop = false;
 
 bool new_cloud_available_flag = false;
 geometry_msgs::Twist cmd;
@@ -69,15 +70,28 @@ PointCloudT::Ptr computeNeonVoxels(PointCloudT::Ptr in) {
 
    //Point Cloud to store out neon cap
    PointCloudT::Ptr temp_neon_cloud (new PointCloudT);
+   PointCloudT::Ptr temp_obstacle_cloud (new PointCloudT);
    for (int i = 0; i < in->points.size(); i++) {
       unsigned int r, g, b;
+      int x, z;
       r = in->points[i].r;
       g = in->points[i].g;
       b = in->points[i].b;
-
+      x = in->points[i].x;
+      z = in->points[i].z;
       //ROS_INFO("The rgb values of the neon cap is: (%d, %d, %d)", points[i].r, points[i].b, points[i].g);
       //ROS_INFO("The rgb values of the neon cap is: (%d, %d, %d)", r, g, b);
       // Look for mostly neon value points.
+     if( (.2 < x) && (x < .25) && (.1 > z) && (z > 0)){
+     ROS_INFO("The x z of the neon cap is: (%d, %d)", x, z);
+	temp_obstacle_cloud->push_back(in->points[i]);
+	
+
+	if(temp_obstacle_cloud->points.size() > 35) {
+		ROS_INFO("I see an obstacle.");
+		//stop = true;
+	}
+	}
 
      if (r > 205 && r < 230 && g > 70 && g < 95 && b > 40 && b < 80) {//ORANGE
      ROS_INFO("The rgb values of the neon cap is: (%d, %d, %d)", r, g, b);
@@ -92,8 +106,13 @@ ros::Publisher cmd_pub;
 
 void moveRobot(double x, double y, double z, double computedLinearVelocity){
    if(computedLinearVelocity > 0.75){//robot to close to cap, must move away from it.
-
+/*	if(stop){
+		cmd.linear.x = 0;
+		stop = false;
+	}
+	else{*/
       cmd.linear.x = std::min(computedLinearVelocity, 0.2);
+//	}
       // Turn towards target
       double computedAngularVelocity = atan2(y, x);
       cmd.angular.z = computedAngularVelocity;
@@ -203,6 +222,8 @@ int main (int argc, char** argv)
 
    while (ros::ok())
    {
+	
+//	stop = false;
 	ros::spinOnce();
 	r.sleep();
 	ROS_INFO("I am currently running.");
@@ -273,7 +294,7 @@ int main (int argc, char** argv)
 	   moveSwitch = !moveSwitch;
 	   moveTimer = 0;
 	}
-
+	ROS_INFO("I got here.");
 	if(neon_cloud->points.size() > 35) {
 		moveSwitch = !moveSwitch;
 		moveTimer = 0;
@@ -287,4 +308,3 @@ int main (int argc, char** argv)
    }
    return 0;
 }
-
