@@ -8,6 +8,23 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+void writeToTextFile(){
+   
+FILE *f = fopen("caughtmessage.txt", "w");
+if (f == NULL)
+{
+    printf("Error opening file!\n");
+    exit(1);
+}
+
+/* print integers and floats */
+int i = 1;
+fprintf(f, "%d", i);
+
+fclose(f);
+
+}
+
 void error(const char *msg)
 {
     perror(msg);
@@ -46,6 +63,8 @@ while (i == 0) {
      if (n < 0) error("ERROR reading from socket");
      printf("Here is the message: %s\n",buffer);
      n = write(newsockfd,"I got your message",18);
+     writeToTextFile();
+     
      if (n < 0) error("ERROR writing to socket");
 }
      close(newsockfd);
