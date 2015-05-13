@@ -1,4 +1,8 @@
 //This bot reacts to orange!
+extern "C" {
+#include "client.h"
+}
+
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"
@@ -99,6 +103,8 @@ void moveRobot(double x, double y, double z, double computedLinearVelocity){
    }
    else{
 	//Do something here. Like send caught signal here.
+	
+	sendMessage();
 
 	double startTime = ros::Time::now().toSec();
 	double endTime = startTime;
