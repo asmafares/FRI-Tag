@@ -36,10 +36,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/fri/catkin_ws_bob/src
+CMAKE_SOURCE_DIR = /home/fri/catkin_ws_testtag/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/fri/catkin_ws_bob/build
+CMAKE_BINARY_DIR = /home/fri/catkin_ws_testtag/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -117,9 +117,9 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/fri/catkin_ws_bob/build/CMakeFiles /home/fri/catkin_ws_bob/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/fri/catkin_ws_testtag/build/CMakeFiles /home/fri/catkin_ws_testtag/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/fri/catkin_ws_bob/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/fri/catkin_ws_testtag/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -342,6 +342,19 @@ bond_generate_messages_py/fast:
 .PHONY : bond_generate_messages_py/fast
 
 #=============================================================================
+# Target rules for targets named clientlib
+
+# Build rule for target.
+clientlib: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 clientlib
+.PHONY : clientlib
+
+# fast build rule for target.
+clientlib/fast:
+	$(MAKE) -f kinect_demo/CMakeFiles/clientlib.dir/build.make kinect_demo/CMakeFiles/clientlib.dir/build
+.PHONY : clientlib/fast
+
+#=============================================================================
 # Target rules for targets named detect_cap_chaser
 
 # Build rule for target.
@@ -366,19 +379,6 @@ detect_cap_runner: cmake_check_build_system
 detect_cap_runner/fast:
 	$(MAKE) -f kinect_demo/CMakeFiles/detect_cap_runner.dir/build.make kinect_demo/CMakeFiles/detect_cap_runner.dir/build
 .PHONY : detect_cap_runner/fast
-
-#=============================================================================
-# Target rules for targets named detect_maybe
-
-# Build rule for target.
-detect_maybe: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 detect_maybe
-.PHONY : detect_maybe
-
-# fast build rule for target.
-detect_maybe/fast:
-	$(MAKE) -f kinect_demo/CMakeFiles/detect_maybe.dir/build.make kinect_demo/CMakeFiles/detect_maybe.dir/build
-.PHONY : detect_maybe/fast
 
 #=============================================================================
 # Target rules for targets named dynamic_reconfigure_gencfg
@@ -771,6 +771,19 @@ sensor_msgs_generate_messages_py/fast:
 .PHONY : sensor_msgs_generate_messages_py/fast
 
 #=============================================================================
+# Target rules for targets named serverlib
+
+# Build rule for target.
+serverlib: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 serverlib
+.PHONY : serverlib
+
+# fast build rule for target.
+serverlib/fast:
+	$(MAKE) -f kinect_demo/CMakeFiles/serverlib.dir/build.make kinect_demo/CMakeFiles/serverlib.dir/build
+.PHONY : serverlib/fast
+
+#=============================================================================
 # Target rules for targets named std_msgs_generate_messages_cpp
 
 # Build rule for target.
@@ -954,9 +967,9 @@ help:
 	@echo "... bond_generate_messages_cpp"
 	@echo "... bond_generate_messages_lisp"
 	@echo "... bond_generate_messages_py"
+	@echo "... clientlib"
 	@echo "... detect_cap_chaser"
 	@echo "... detect_cap_runner"
-	@echo "... detect_maybe"
 	@echo "... dynamic_reconfigure_gencfg"
 	@echo "... dynamic_reconfigure_generate_messages_cpp"
 	@echo "... dynamic_reconfigure_generate_messages_lisp"
@@ -987,6 +1000,7 @@ help:
 	@echo "... sensor_msgs_generate_messages_cpp"
 	@echo "... sensor_msgs_generate_messages_lisp"
 	@echo "... sensor_msgs_generate_messages_py"
+	@echo "... serverlib"
 	@echo "... std_msgs_generate_messages_cpp"
 	@echo "... std_msgs_generate_messages_lisp"
 	@echo "... std_msgs_generate_messages_py"
@@ -1012,4 +1026,3 @@ help:
 cmake_check_build_system:
 	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
-
