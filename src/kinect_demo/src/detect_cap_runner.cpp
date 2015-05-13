@@ -186,18 +186,18 @@ int main (int argc, char** argv)
         
             ROS_INFO("Before voxel grid filter: %i points",(int)cloud->points.size());
         
-  	ifstream message ("caughtmessage.txt");
-  	string line;
-  	getline (myfile,line);
+  	std::ifstream message ("caughtmessage.txt");
+  	std::string line;
+  	getline (message,line);
   	if (line == "1"){
   		caught = true;
-  		ofstream newMessage ("caughtmessage.txt");
+  		std::ofstream newMessage ("caughtmessage.txt");
 		newMessage << "0";
     		newMessage.close();
   	}
   	message.close();
   	
-  }
+  
         
             // Voxel Grid reduces the computation time. Its a good idea to do it if you will be doing
             //sequential processing or frame-by-frame
@@ -256,4 +256,3 @@ int main (int argc, char** argv)
 	delete controller;
     return 0;
 }
-
