@@ -1,5 +1,6 @@
-1. Move the files out of the FRI Tag folder directly into catkin_ws_testtag. Delete the FRI-Tag folder.
-2. Check to make sure client.c has the correct IP address.
-3. Delete anything in caughtmessage.txt.
-4. Compile server.c. Put the executable into the catkin_make folder, and run it on the runner bot.
-5. rosrun the runner on the runner bot; rosrun the chaser on the chaser bot
+1. Make a directory called catkin_ws_testtag, clone this repo into that directory.
+2. Move the files out of the FRI Tag folder directly into catkin_ws_testtag. Delete the FRI-Tag folder.
+3. Check to make sure client.c has the correct IP address.
+4. Delete anything in caughtmessage.txt.
+5. Compile server.c. Put the executable into the catkin_ws_testtag folder, and run it on the runner bot.
+6. rosrun the runner on the runner bot; rosrun the chaser on the chaser bot
