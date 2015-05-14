@@ -4,3 +4,9 @@
 4. Delete anything in caughtmessage.txt.
 5. Compile server.c. Put the executable into the catkin_ws_testtag folder, and run it on the runner bot.
 6. rosrun the runner on the runner bot; rosrun the chaser on the chaser bot
+
+
+To run rviz:
+(1) Pull up the usual commands (roscore, roslaunch openni_launch, roslaunch turtlebot)
+(2) In a new command terminal run: rosrun rviz rviz
+(3) Add in PointClouds (not sure how to do this...)
