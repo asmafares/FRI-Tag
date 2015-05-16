@@ -10,10 +10,10 @@
 using namespace std;
 using namespace pargo;
 
-const double epsilon = 0.05;
+const double epsilon = 0.1;
 
-const double max_velocity = .3;
-const double min_velocity = -.3;
+const double max_velocity = .2;
+const double min_velocity = -.2;
 
 
 vector<BoundsPair> extendBounds(const std::vector<BoundsPair> &bounds) {
@@ -51,9 +51,9 @@ geometry_msgs::Twist ValueLearner::computeAction(const std::vector<double>& stat
   if(rand() <= epsilon * RAND_MAX) {
     //random action
     double v = rand();
-    action.linear.x = (v /RAND_MAX * (.3 - (-.3))) + -.3;
+    action.linear.x = (v /RAND_MAX * (.2 - (-.2))) + -.2;
     v = rand();
-    action.angular.z = (v /RAND_MAX * (.3 - (-.3))) + -.3;
+    action.angular.z = (v /RAND_MAX * (.2 - (-.2))) + -.2;
     
   }else {
     
