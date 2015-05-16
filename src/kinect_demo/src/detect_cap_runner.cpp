@@ -32,6 +32,9 @@
 
 LearningController *controller;
 bool caught = false;
+bool stop = false;
+int stopTimes = 0;
+int backTimes = 0;
 
 std::vector<double> lastState;
 geometry_msgs::Twist lastAction;
@@ -96,19 +99,33 @@ PointCloudT::Ptr computeNeonVoxels(PointCloudT::Ptr in) {
  
     //Point Cloud to store out neon cap
     PointCloudT::Ptr temp_neon_cloud (new PointCloudT);
+    PointCloudT::Ptr temp_obstacle_cloud (new PointCloudT);
 
     for (int i = 0; i < in->points.size(); i++) {
         unsigned int r, g, b;
+	double y, z;
         r = in->points[i].r;
         g = in->points[i].g;
         b = in->points[i].b;
+        y = in->points[i].y;
+        z = in->points[i].z;
 	//ROS_INFO("The rgb values of the neon cap is: (%d, %d, %d)", points[i].r, points[i].b, points[i].g);
 	//ROS_INFO("The rgb values of the neon cap is: (%d, %d, %d)", r, g, b);
         // Look for mostly neon value points.
+
 	if (g < 40 && (r + b) > 250) {//PINK
-	    ROS_INFO("The rgb values of the neon cap is: (%d, %d, %d)", r, g, b);
+	    //ROS_INFO("The rgb values of the neon cap is: (%d, %d, %d)", r, g, b);
             temp_neon_cloud->push_back(in->points[i]);
         }
+	else if((-.5 < y) && (y < .5) && (z > 0) && (z < .45)){
+        	ROS_INFO("The y z of the obstacle is: (%f, %f)", y, z);
+		temp_obstacle_cloud->push_back(in->points[i]);
+
+		if(temp_obstacle_cloud->points.size() > 50) {
+			ROS_INFO("I see an obstacle.");
+			stop = true;
+		}
+     	}
     }
 
     return temp_neon_cloud;
@@ -116,33 +133,53 @@ PointCloudT::Ptr computeNeonVoxels(PointCloudT::Ptr in) {
 
 ros::Publisher cmd_pub;
 void moveRobot(double x, double y, double z, double d, int size){
-
 	
    std::vector<double> state(2,0.);
    double angle = atan2(y,x);
    state[0] = d;
-	ROS_INFO("D is: (%f)", d);
-	ROS_INFO("Size is: (%d)", size);
- // ???  state[1] = angles::shortest_angular_distance(pose->theta,angle);
+   ROS_INFO("D is: (%f)", d);
+   ROS_INFO("Size is: (%d)", size);
+   // ???  state[1] = angles::shortest_angular_distance(pose->theta,angle);
 
-  if((d < 0.8 ) && size > 25) {
-	return;
-	}
-	else{
-
-	   geometry_msgs::Twist action = controller->computeAction(state);
-   
-	   if(!lastState.empty()) {
+   //if((d < 0.8 ) && size > 25) {
+   //	return;
+   //}
+   //else{
+      if(stop){
+	  if(stopTimes <= 1){
+ROS_INFO("Stoping %d", stopTimes);
+	     cmd.linear.x = 0.;
+	     cmd.angular.z = 0.;
+	     stopTimes++;
+          }
+	  else if(backTimes <= 5){
+	     cmd.linear.x = -.1;
+	     cmd.angular.z = 0.;
+	     backTimes++;
+ROS_INFO("going back %d", backTimes);
+	  }
+          else{
+ROS_INFO("Turning");
+	     cmd.linear.x = .1;
+	     cmd.angular.z = 1.0;
+	  }
+	  stop = false;
+          cmd_pub.publish(cmd);
+      }
+      else{
+	  stopTimes = 0;
+          backTimes = 0;
+          geometry_msgs::Twist action = controller->computeAction(state);
+          if(!lastState.empty()) {
      		double reward = r(lastState,lastAction,state);
      		controller->learn(lastState,lastAction,reward,state, action);
-	   }
-
-	   lastState = state;
-   	   lastAction = action;
-   
-	   cmd_pub.publish(action);
-
-	}
+          }
+	  stop = false;
+          lastState = state;
+          lastAction = action;
+          cmd_pub.publish(action);
+      }   
+   //}
 }
 
 
@@ -190,6 +227,7 @@ int main (int argc, char** argv)
   	std::string line;
   	getline (message,line);
   	if (line == "1"){
+		ROS_INFO("We got through the if loop and this message is very long to make it quite noticable compared to the surrounding text!!!");
   		caught = true;
   		std::ofstream newMessage ("caughtmessage.txt");
 		newMessage << "0";
