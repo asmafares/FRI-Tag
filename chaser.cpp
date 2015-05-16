@@ -47,6 +47,8 @@ sensor_msgs::PointCloud2 cloud_ros;
 bool moveSwitch = false;
 int moveTimer = 0;
 int randomVal = 0;
+int stopTimes = 0;
+int backTimes = 0;
 
 void cloud_sub(const sensor_msgs::PointCloud2ConstPtr& msg) {
    //convert the msg to PCL format
@@ -106,16 +108,33 @@ ros::Publisher cmd_pub;
 void moveRobot(double x, double y, double z, double computedLinearVelocity){
    if(computedLinearVelocity > 0.75){//robot to close to cap, must move away from it.
 	if(stop){
-		cmd.linear.x = 0.1;
-		stop = false;
+		if(stopTimes <= 1){
+ROS_INFO("stop %d", stopTimes);
+	 	  cmd.linear.x = 0.0;
+		  cmd.angular.z = 0.0;
+		  stopTimes++;
+		}
+		else if(backTimes <= 5){
+
+ROS_INFO("back %d", backTimes);
+		  cmd.linear.x = -0.1;
+		  cmd.angular.z = 0.0;
+		  backTimes++;
+		}
+		else{
+
+ROS_INFO("turn to cap");
+			cmd.angular.z = atan2(y, x);
+			cmd.linear.x = 0.1;
+			stop = false;
+		}
 	}
 	else{
+		backTimes = 0;
+		stopTimes = 0;
       		cmd.linear.x = std::min(computedLinearVelocity, 0.2);
+    		cmd.angular.z = atan2(y, x);
 	}
-
-      // Turn towards target
-      double computedAngularVelocity = atan2(y, x);
-      cmd.angular.z = computedAngularVelocity;
 
       // Send command to turtle
       cmd_pub.publish(cmd);
@@ -136,10 +155,29 @@ void moveRobot(double x, double y, double z, double computedLinearVelocity){
 
 void turn(){
    if(stop){
-	cmd.linear.x = 0.1;
-	cmd.angular.z = 1.0;
+	if(stopTimes <= 1){
+ROS_INFO("stop %d", stopTimes);
+	  cmd.linear.x = 0.0;
+	  cmd.angular.z = 0.0;
+	  stopTimes++;
+	}
+	else if(backTimes <= 5){
+
+ROS_INFO("back %d", backTimes);
+	  cmd.linear.x = -0.1;
+	  cmd.angular.z = 0.0;
+	  backTimes++;
+	}
+	else{
+
+ROS_INFO("turn");
+	  cmd.linear.x = 0.1;
+	  cmd.angular.z = 1.0;
+	}
    }
    else{
+	stopTimes = 0;
+	backTimes = 0;
       if(!moveSwitch) {
          ROS_INFO("I am spinning.");
          cmd.linear.x = 0.1;
